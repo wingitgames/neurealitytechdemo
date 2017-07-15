@@ -11,30 +11,30 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int maxX = 10;
-    private static int maxY = 12;
+    private static int MAX_X = 10;
+    private static int MAX_Y = 12;
 
-    private char humanReadableMap[]= {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                                      'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'};
-    char visibleMap[][] = new char[maxX][maxY];
+    private char fullMap[]= {'W', 'W', 'W', 'W', 'W', 'F', 'W', 'W', 'W', 'W',
+                             'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'F', 'F',
+                             'W', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W',
+                             'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F',
+                             'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F',
+                             'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F',
+                             'W', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'W', 'F',
+                             'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F',
+                             'W', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F',
+                             'W', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'F',
+                             'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
+                             'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'};
+    char visibleMap[][] = new char[MAX_X][MAX_Y];
 
-    private static final int partyX = 0;
-    private static final int partyY = 1;
-    private static final int partyLevel = 2;
+    private static final int PARTY_X = 0;
+    private static final int PARTY_Y = 1;
+    private static final int PARTY_LEVEL = 2;
     private int partyLocation[] = {7, 5, 0};
     private char oldFloorPiece = 'F';
 
-    Button mapButton[][] = new Button[maxX][maxY];
+    Button mapButton[][] = new Button[MAX_X][MAX_Y];
 
 
     @Override
@@ -95,26 +95,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void convertRowColMapToXY() {
 
-        for(int x = 0; x < maxX; x++) {
-            for(int y = 0; y < maxY; y++) {
+        int mapLocation = 0;
+        for(int y = MAX_Y - 1; y >= 0 ; y--) {
+            for(int x = 0; x < MAX_X; x++) {
 
-                int newY = maxY - y - 1;
-                int humanMapLocation = (x * maxY) + y;
-                visibleMap[x][newY] = humanReadableMap[humanMapLocation];
+                int newY = MAX_Y - y - 1;
+                visibleMap[x][y] = fullMap[mapLocation];
+                mapLocation++;
             }
         }
     }
 
     private void initializeMapButtons() {
 
-        for(int x = 0; x < maxX; x++) {
-            for(int y = 0; y < maxY; y++) {
+        for(int x = 0; x < MAX_X; x++) {
+            for(int y = 0; y < MAX_Y; y++) {
 
                 String buttonId = "x" + x + "y" + y;
                 int buttonResourceId = getResources().getIdentifier(buttonId, "id", getPackageName());
                 mapButton[x][y] = (Button)findViewById(buttonResourceId);
 
-                mapButton[x][y].setBackgroundResource(R.drawable.floor);
+                int mapPiece = getMapPiece(x, y);
+
+                mapButton[x][y].setBackgroundResource(mapPiece);
 
                 addListenerToMapButton(mapButton[x][y], x, y);
             }
@@ -128,15 +131,41 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                int moveX = mapX > partyLocation[partyX] ?  1 : mapX < partyLocation[partyX] ? -1 : 0;
-                int moveY = mapY > partyLocation[partyY] ?  1 : mapY < partyLocation[partyY] ? -1 : 0;
+                int moveX = mapX > partyLocation[PARTY_X] ?  1 : mapX < partyLocation[PARTY_X] ? -1 : 0;
+                int moveY = mapY > partyLocation[PARTY_Y] ?  1 : mapY < partyLocation[PARTY_Y] ? -1 : 0;
 
-                restoreOldFloor(mapButton);
+                int newX = partyLocation[PARTY_X] + moveX;
+                int newY = partyLocation[PARTY_Y] + moveY;
 
-                partyLocation[partyX] = partyLocation[partyX] + moveX;
-                partyLocation[partyY] = partyLocation[partyY] + moveY;
+                if(moveableSpace(visibleMap[newX][newY])){
 
-                showParty();
+                    restoreOldFloor();
+
+                    partyLocation[PARTY_X] = newX;
+                    partyLocation[PARTY_Y] = newY;
+
+                    showParty();
+                }
+            }
+
+            private boolean moveableSpace(char newSpace) {
+
+                boolean retres;
+
+                switch(newSpace) {
+
+                    case 'F':
+                        retres = true;
+                        break;
+                    case 'W':
+                        retres = false;
+                        break;
+                    default:
+                        retres = false;
+                        break;
+                }
+
+                return retres;
             }
 
 
@@ -147,8 +176,8 @@ public class MainActivity extends AppCompatActivity {
 
         setOldFloorPiece();
 
-        int x =  partyLocation[partyX];
-        int y =  partyLocation[partyY];
+        int x =  partyLocation[PARTY_X];
+        int y =  partyLocation[PARTY_Y];
 
         String buttonId = "x" + x + "y" + y;
         int buttonResourceId = getResources().getIdentifier(buttonId, "id", getPackageName());
@@ -159,16 +188,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void setOldFloorPiece() {
 
-        int x =  partyLocation[partyX];
-        int y =  partyLocation[partyY];
+        int x =  partyLocation[PARTY_X];
+        int y =  partyLocation[PARTY_Y];
 
         oldFloorPiece = visibleMap[x][y];
     }
 
-    private void restoreOldFloor(Button mapButton) {
+    private void restoreOldFloor() {
 
-        int x =  partyLocation[partyX];
-        int y =  partyLocation[partyY];
+        int x =  partyLocation[PARTY_X];
+        int y =  partyLocation[PARTY_Y];
 
         String buttonId = "x" + x + "y" + y;
         int buttonResourceId = getResources().getIdentifier(buttonId, "id", getPackageName());
@@ -179,18 +208,38 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private int getOldFloorPiece() {
+    private int getPieceFromTile(char tile) {
 
-        int oldPiece;
+        int piece;
 
-        switch(oldFloorPiece) {
+        switch(tile) {
             case 'F':
-                oldPiece = R.drawable.floor;
+                piece = R.drawable.floor1;
+                break;
+            case 'W':
+                piece = R.drawable.wall1;
                 break;
             default:
-                oldPiece = R.drawable.floor;
+                piece = R.drawable.floor1;
                 break;
         }
+
+        return piece;
+    }
+
+    private int getMapPiece(int x, int y) {
+
+        char mapTile = visibleMap[x][y];
+
+        int piece = getPieceFromTile(mapTile);
+
+        return piece;
+    }
+
+
+    private int getOldFloorPiece() {
+
+        int oldPiece = getPieceFromTile(oldFloorPiece);
 
         return oldPiece;
     }
