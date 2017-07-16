@@ -1,5 +1,6 @@
 package com.wingitgames.neurealitytechdemo.neurealitytechdemo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
@@ -14,24 +15,25 @@ public class MainActivity extends AppCompatActivity {
     private static int MAX_X = 10;
     private static int MAX_Y = 12;
 
-    private char fullMap[]= {'W', 'W', 'W', 'W', 'W', 'F', 'W', 'W', 'W', 'W',
-                             'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'F', 'F',
-                             'W', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W',
+    private char fullMap[]= {'W', 'u', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'W',
+                             'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F',
+                             'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W',
                              'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F',
                              'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F',
                              'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F',
-                             'W', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'W', 'F',
+                             'W', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F',
                              'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F',
-                             'W', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F',
-                             'W', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'F',
+                             'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F',
+                             'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F',
                              'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                             'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'};
+                             'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W'};
     char visibleMap[][] = new char[MAX_X][MAX_Y];
 
     private static final int PARTY_X = 0;
     private static final int PARTY_Y = 1;
     private static final int PARTY_LEVEL = 2;
-    private int partyLocation[] = {7, 5, 0};
+    private static final int PARTY_SPEED = 3;
+    private int partyLocation[] = {7, 0, 0, 1};
     private char oldFloorPiece = 'F';
 
     Button mapButton[][] = new Button[MAX_X][MAX_Y];
@@ -131,24 +133,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                int moveX = mapX > partyLocation[PARTY_X] ?  1 : mapX < partyLocation[PARTY_X] ? -1 : 0;
-                int moveY = mapY > partyLocation[PARTY_Y] ?  1 : mapY < partyLocation[PARTY_Y] ? -1 : 0;
+                for(int m = 0; m < partyLocation[PARTY_SPEED]; m++) {
 
-                int newX = partyLocation[PARTY_X] + moveX;
-                int newY = partyLocation[PARTY_Y] + moveY;
+                    int moveX = mapX > partyLocation[PARTY_X] ? 1 : mapX < partyLocation[PARTY_X] ? -1 : 0;
+                    int moveY = mapY > partyLocation[PARTY_Y] ? 1 : mapY < partyLocation[PARTY_Y] ? -1 : 0;
 
-                if(moveableSpace(visibleMap[newX][newY])){
+                    int newX = partyLocation[PARTY_X] + moveX;
+                    int newY = partyLocation[PARTY_Y] + moveY;
 
-                    restoreOldFloor();
+                    if (movableSpace(visibleMap[newX][newY])) {
 
-                    partyLocation[PARTY_X] = newX;
-                    partyLocation[PARTY_Y] = newY;
+                        restoreOldFloor();
 
-                    showParty();
+                        partyLocation[PARTY_X] = newX;
+                        partyLocation[PARTY_Y] = newY;
+
+                        showParty();
+
+                    } else {
+
+                        break;
+                    }
                 }
             }
 
-            private boolean moveableSpace(char newSpace) {
+            private boolean movableSpace(char newSpace) {
 
                 boolean retres;
 
@@ -159,6 +168,18 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 'W':
                         retres = false;
+                        break;
+                    case 'U':
+                        retres = true;
+                        break;
+                    case 'L':
+                        retres = false;
+                        break;
+                    case 'u':
+                        retres = true;
+                        break;
+                    case 'd':
+                        retres = true;
                         break;
                     default:
                         retres = false;
@@ -218,6 +239,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 'W':
                 piece = R.drawable.wall1;
+                break;
+            case 'U':
+                piece = R.drawable.door1;
+                break;
+            case 'L':
+                piece = R.drawable.door1;
+                break;
+            case 'u':
+                piece = R.drawable.up1;
+                break;
+            case 'd':
+                piece = R.drawable.down1;
                 break;
             default:
                 piece = R.drawable.floor1;
