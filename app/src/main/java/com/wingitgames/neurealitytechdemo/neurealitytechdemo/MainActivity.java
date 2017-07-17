@@ -1,6 +1,5 @@
 package com.wingitgames.neurealitytechdemo.neurealitytechdemo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Menu;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private char oldFloorPiece = 'F';
 
     Button mapButton[][] = new Button[MAX_X][MAX_Y];
-
+    Button walkButton[][] = new Button[MAX_X][MAX_Y];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,22 +112,25 @@ public class MainActivity extends AppCompatActivity {
         for(int x = 0; x < MAX_X; x++) {
             for(int y = 0; y < MAX_Y; y++) {
 
-                String buttonId = "x" + x + "y" + y;
-                int buttonResourceId = getResources().getIdentifier(buttonId, "id", getPackageName());
-                mapButton[x][y] = (Button)findViewById(buttonResourceId);
+                String backId = "backx" + x + "y" + y;
+                String walkId = "walkx" + x + "y" + y;
+                int backResourceId = getResources().getIdentifier(backId, "id", getPackageName());
+                int walkResourceId = getResources().getIdentifier(walkId, "id", getPackageName());
+                mapButton[x][y] = (Button)findViewById(backResourceId);
+                walkButton[x][y] = (Button)findViewById(walkResourceId);
 
                 int mapPiece = getMapPiece(x, y);
 
                 mapButton[x][y].setBackgroundResource(mapPiece);
 
-                addListenerToMapButton(mapButton[x][y], x, y);
+                addListenerToMapButton(walkButton[x][y], x, y);
             }
         }
     }
 
-    private void addListenerToMapButton(final Button mapButton, final int mapX, final int mapY) {
+    private void addListenerToMapButton(final Button walkButton, final int mapX, final int mapY) {
 
-        mapButton.setOnClickListener(new View.OnClickListener() {
+        walkButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -200,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         int x =  partyLocation[PARTY_X];
         int y =  partyLocation[PARTY_Y];
 
-        String buttonId = "x" + x + "y" + y;
+        String buttonId = "walkx" + x + "y" + y;
         int buttonResourceId = getResources().getIdentifier(buttonId, "id", getPackageName());
         Button btn = (Button)findViewById(buttonResourceId);
 
@@ -220,12 +222,12 @@ public class MainActivity extends AppCompatActivity {
         int x =  partyLocation[PARTY_X];
         int y =  partyLocation[PARTY_Y];
 
-        String buttonId = "x" + x + "y" + y;
+        String buttonId = "walkx" + x + "y" + y;
         int buttonResourceId = getResources().getIdentifier(buttonId, "id", getPackageName());
         Button btn = (Button)findViewById(buttonResourceId);
 
-        int oldFloorResource = getOldFloorPiece();
-        btn.setBackgroundResource(oldFloorResource);
+        //int oldFloorResource = getOldFloorPiece();
+        btn.setBackgroundResource(android.R.color.transparent);
 
     }
 
