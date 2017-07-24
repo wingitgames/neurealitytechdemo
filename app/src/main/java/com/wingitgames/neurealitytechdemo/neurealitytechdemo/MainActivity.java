@@ -1,4 +1,5 @@
 package com.wingitgames.neurealitytechdemo.neurealitytechdemo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,29 +15,37 @@ public class MainActivity extends AppCompatActivity {
     private static int MAX_X = 10;
     private static int MAX_Y = 12;
 
-    private char fullMap[]= {'W', 'u', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'W',
-                             'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F',
-                             'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W',
-                             'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F',
-                             'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F',
-                             'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F',
-                             'W', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F',
-                             'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F',
-                             'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F',
-                             'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F',
-                             'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F',
-                             'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W'};
+    private char bigMap[][] = {{'F', 'F', 'W', 'u', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F'},
+                               {'F', 'F', 'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'F'},
+                               {'F', 'F', 'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+                               {'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+                               {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
+                               {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+                               {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'}};
+    
     char visibleMap[][] = new char[MAX_X][MAX_Y];
+
+    int bigMapRowOffset = 2;
+    int bigMapColOffset = 2;
 
     private static final int PARTY_X = 0;
     private static final int PARTY_Y = 1;
     private static final int PARTY_LEVEL = 2;
     private static final int PARTY_SPEED = 3;
-    private int partyLocation[] = {7, 0, 0, 1};
-    private char oldFloorPiece = 'F';
+    private int partyLocation[] = {5, 5, 0, 1};
+    private char oldFloorPiece = 'F'; // cat technique r54tttttttttre455555555555555ewrdddddddddddddddddt65555555555555555555555555555555555555555555555555555555555555555555555
 
     Button mapButton[][] = new Button[MAX_X][MAX_Y];
     Button walkButton[][] = new Button[MAX_X][MAX_Y];
+
+    String currentSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,19 +99,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeVisibleMap() {
 
-        convertRowColMapToXY();
+        populateVisibleMap();
         initializeMapButtons();
     }
 
-    private void convertRowColMapToXY() {
+    private void populateVisibleMap() {
+        
+        for(int x = 0; x < MAX_X; x++) {
+            for(int y = 0; y < MAX_Y; y++) {
 
-        int mapLocation = 0;
-        for(int y = MAX_Y - 1; y >= 0 ; y--) {
-            for(int x = 0; x < MAX_X; x++) {
+                int newRow = bigMap[0].length - y - bigMapRowOffset - 1;
+                int newCol = x + bigMapColOffset;
 
-                int newY = MAX_Y - y - 1;
-                visibleMap[x][y] = fullMap[mapLocation];
-                mapLocation++;
+                if(bigMap[0].length > newCol && newRow >= 0) {
+
+                    visibleMap[x][y] = bigMap[newRow][newCol];
+
+                } else {
+
+                    visibleMap[x][y] = 'W';
+                }
+
+                String backId = "backx" + x + "y" + y;
+                int backResourceId = getResources().getIdentifier(backId, "id", getPackageName());
+                mapButton[x][y] = (Button)findViewById(backResourceId);
+
+                int mapPiece = getMapPiece(x, y);
+
+                mapButton[x][y].setBackgroundResource(mapPiece);
+
             }
         }
     }
@@ -112,16 +137,10 @@ public class MainActivity extends AppCompatActivity {
         for(int x = 0; x < MAX_X; x++) {
             for(int y = 0; y < MAX_Y; y++) {
 
-                String backId = "backx" + x + "y" + y;
                 String walkId = "walkx" + x + "y" + y;
-                int backResourceId = getResources().getIdentifier(backId, "id", getPackageName());
                 int walkResourceId = getResources().getIdentifier(walkId, "id", getPackageName());
-                mapButton[x][y] = (Button)findViewById(backResourceId);
                 walkButton[x][y] = (Button)findViewById(walkResourceId);
-
-                int mapPiece = getMapPiece(x, y);
-
-                mapButton[x][y].setBackgroundResource(mapPiece);
+                walkButton[x][y].setSoundEffectsEnabled(false);
 
                 addListenerToMapButton(walkButton[x][y], x, y);
             }
@@ -135,28 +154,73 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                for(int m = 0; m < partyLocation[PARTY_SPEED]; m++) {
+                if(currentSound == "walk1") {
+                    currentSound = "walk2";
 
-                    int moveX = mapX > partyLocation[PARTY_X] ? 1 : mapX < partyLocation[PARTY_X] ? -1 : 0;
-                    int moveY = mapY > partyLocation[PARTY_Y] ? 1 : mapY < partyLocation[PARTY_Y] ? -1 : 0;
+                } else {
 
-                    int newX = partyLocation[PARTY_X] + moveX;
-                    int newY = partyLocation[PARTY_Y] + moveY;
+                    currentSound = "walk1";
+                }
 
-                    if (movableSpace(visibleMap[newX][newY])) {
+                int moveX = mapX > partyLocation[PARTY_X] ? 1 : mapX < partyLocation[PARTY_X] ? -1 : 0;
+                int moveY = mapY > partyLocation[PARTY_Y] ? 1 : mapY < partyLocation[PARTY_Y] ? -1 : 0;
 
-                        restoreOldFloor();
+                int newX = partyLocation[PARTY_X] + moveX;
+                int newY = partyLocation[PARTY_Y] + moveY;
 
-                        partyLocation[PARTY_X] = newX;
-                        partyLocation[PARTY_Y] = newY;
+                int newMapX = newX;
+                int newMapY = newY;
 
-                        showParty();
+                boolean moveMap = false;
 
-                    } else {
+                if(newX > MAX_X - 2  && partyLocation[PARTY_X] + bigMapColOffset < bigMap[0].length - 2) {
 
-                        break;
+                    newMapX--;
+                    bigMapColOffset++;
+                    moveMap = true;
+
+                } else if(newX < 2 && bigMapColOffset > 0) {
+
+                    newMapX++;
+                    bigMapColOffset--;
+                    moveMap = true;
+                }
+
+                if(newY > MAX_Y - 2 && partyLocation[PARTY_Y] + bigMapRowOffset < bigMap.length - 2) {
+
+                    newMapY--;
+                    bigMapRowOffset++;
+                    moveMap = true;
+
+
+                } else if(newY < 2 && bigMapRowOffset > 0) {
+
+                    newMapY++;
+                    bigMapRowOffset--;
+                    moveMap = true;
+                }
+
+
+                if(moveMap == true) {
+
+                    if(movableSpace(visibleMap[newX][newY])) {
+
+                        populateVisibleMap();
                     }
                 }
+
+                if(movableSpace(visibleMap[newMapX][newMapY])) {
+
+                    clearPreviousParty();
+
+                    partyLocation[PARTY_X] = newMapX;
+                    partyLocation[PARTY_Y] = newMapY;
+
+                    showParty();
+                }
+
+
+                playSound(currentSound);
             }
 
             private boolean movableSpace(char newSpace) {
@@ -175,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
                         retres = true;
                         break;
                     case 'L':
+                        currentSound = "knock";
                         retres = false;
                         break;
                     case 'u':
@@ -197,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showParty() {
 
-        setOldFloorPiece();
+        //setOldFloorPiece();
 
         int x =  partyLocation[PARTY_X];
         int y =  partyLocation[PARTY_Y];
@@ -217,13 +282,13 @@ public class MainActivity extends AppCompatActivity {
         oldFloorPiece = visibleMap[x][y];
     }
 
-    private void restoreOldFloor() {
+    private void clearPreviousParty() {
 
         int x =  partyLocation[PARTY_X];
         int y =  partyLocation[PARTY_Y];
 
-        String buttonId = "walkx" + x + "y" + y;
-        int buttonResourceId = getResources().getIdentifier(buttonId, "id", getPackageName());
+        String walkId = "walkx" + x + "y" + y;
+        int buttonResourceId = getResources().getIdentifier(walkId, "id", getPackageName());
         Button btn = (Button)findViewById(buttonResourceId);
 
         //int oldFloorResource = getOldFloorPiece();
@@ -277,5 +342,13 @@ public class MainActivity extends AppCompatActivity {
         int oldPiece = getPieceFromTile(oldFloorPiece);
 
         return oldPiece;
+    }
+
+    private void playSound(String soundName) {
+
+        int audioResource = getResources().getIdentifier(soundName, "raw", getPackageName());;
+
+        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), audioResource);
+        mediaPlayer.start();
     }
 }
