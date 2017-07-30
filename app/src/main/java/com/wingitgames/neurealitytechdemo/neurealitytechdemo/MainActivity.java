@@ -15,20 +15,77 @@ public class MainActivity extends AppCompatActivity {
     private static int MAX_X = 10;
     private static int MAX_Y = 12;
 
-    private char bigMap[][] = {{'F', 'F', 'W', 'u', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F'},
-                               {'F', 'F', 'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'F'},
-                               {'F', 'F', 'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
-                               {'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
-                               {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
-                               {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
-                               {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'}};
+    private char readableBigMap[][] =
+/*
+
+            {{'F', 'F', 'F', 'F', 'F'},
+            { 'W', 'U', 'W', 'W', 'W'},
+            { 'W', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W'},
+            {'F', 'F', 'W', 'F', 'F'}};
+*/
+
+/*
+            {{'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'}};
+*/
+
+            {{'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'U', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'L', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'F', 'W', 'F', 'F', 'W', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'W', 'F', 'U', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'W', 'W', 'W', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'U', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'W', 'W', 'W', 'W', 'L', 'W', 'W', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'W', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F', 'F', 'F', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'd', 'W', 'W', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'},
+            {'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F', 'F'}};
+
+
+    char bigMap[][] = new char[readableBigMap.length][readableBigMap[0].length];
     
     char visibleMap[][] = new char[MAX_X][MAX_Y];
 
@@ -39,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PARTY_Y = 1;
     private static final int PARTY_LEVEL = 2;
     private static final int PARTY_SPEED = 3;
-    private int partyLocation[] = {5, 5, 0, 1};
+    private int partyLocation[] = {2, 2, 0, 1};
     private char oldFloorPiece = 'F'; // cat technique r54tttttttttre455555555555555ewrdddddddddddddddddt65555555555555555555555555555555555555555555555555555555555555555555555
 
     Button mapButton[][] = new Button[MAX_X][MAX_Y];
@@ -99,25 +156,30 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializeVisibleMap() {
 
+        invertMap();
         populateVisibleMap();
         initializeMapButtons();
     }
 
     private void populateVisibleMap() {
-        
+
         for(int x = 0; x < MAX_X; x++) {
             for(int y = 0; y < MAX_Y; y++) {
 
-                int newRow = bigMap[0].length - y - bigMapRowOffset - 1;
+                int newX = x;
+                int newY = y;
+
+
+                int newRow = y + bigMapRowOffset;
                 int newCol = x + bigMapColOffset;
 
-                if(bigMap[0].length > newCol && newRow >= 0) {
+                if(bigMap[0].length > newCol && bigMap.length > newRow) {
 
-                    visibleMap[x][y] = bigMap[newRow][newCol];
+                    visibleMap[newX][newY] = bigMap[newRow][newCol];
 
                 } else {
 
-                    visibleMap[x][y] = 'W';
+                    visibleMap[x][y] = ' ';
                 }
 
                 String backId = "backx" + x + "y" + y;
@@ -129,6 +191,19 @@ public class MainActivity extends AppCompatActivity {
                 mapButton[x][y].setBackgroundResource(mapPiece);
 
             }
+        }
+    }
+
+    private void invertMap() {
+
+        int newRow = 0;
+        for(int row = readableBigMap.length - 1; row >=0; row--) {
+            for(int col = 0; col < readableBigMap[0].length; col++) {
+
+                bigMap[newRow][col] = readableBigMap[row][col];
+            }
+
+            newRow++;
         }
     }
 
@@ -155,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(currentSound == "walk1") {
+
                     currentSound = "walk2";
 
                 } else {
@@ -171,41 +247,49 @@ public class MainActivity extends AppCompatActivity {
                 int newMapX = newX;
                 int newMapY = newY;
 
-                boolean moveMap = false;
+                boolean moveParty = false;
 
-                if(newX > MAX_X - 2  && partyLocation[PARTY_X] + bigMapColOffset < bigMap[0].length - 2) {
+                int bigMapOldRowOffset = bigMapRowOffset;
+                int bigMapOldColOffset = bigMapColOffset;
+
+                if(newX > MAX_X - 3  && partyLocation[PARTY_X] + bigMapColOffset < bigMap[0].length - 3) {
 
                     newMapX--;
                     bigMapColOffset++;
-                    moveMap = true;
+                    moveParty = true;
 
                 } else if(newX < 2 && bigMapColOffset > 0) {
 
                     newMapX++;
                     bigMapColOffset--;
-                    moveMap = true;
+                    moveParty = true;
                 }
 
-                if(newY > MAX_Y - 2 && partyLocation[PARTY_Y] + bigMapRowOffset < bigMap.length - 2) {
+                if(newY > MAX_Y - 3 && partyLocation[PARTY_Y] + bigMapRowOffset < bigMap.length - 3) {
 
                     newMapY--;
                     bigMapRowOffset++;
-                    moveMap = true;
+                    moveParty = true;
 
 
                 } else if(newY < 2 && bigMapRowOffset > 0) {
 
                     newMapY++;
                     bigMapRowOffset--;
-                    moveMap = true;
+                    moveParty = true;
                 }
 
 
-                if(moveMap == true) {
+                if(moveParty == true) {
 
                     if(movableSpace(visibleMap[newX][newY])) {
 
                         populateVisibleMap();
+
+                    }  else {
+
+                        bigMapRowOffset = bigMapOldRowOffset;
+                        bigMapColOffset = bigMapOldColOffset;
                     }
                 }
 
@@ -229,6 +313,9 @@ public class MainActivity extends AppCompatActivity {
 
                 switch(newSpace) {
 
+                    case ' ':
+                        retres = false;
+                        break;
                     case 'F':
                         retres = true;
                         break;
@@ -301,6 +388,10 @@ public class MainActivity extends AppCompatActivity {
         int piece;
 
         switch(tile) {
+
+            case ' ':
+                piece = R.drawable.blank;
+                break;
             case 'F':
                 piece = R.drawable.floor1;
                 break;
