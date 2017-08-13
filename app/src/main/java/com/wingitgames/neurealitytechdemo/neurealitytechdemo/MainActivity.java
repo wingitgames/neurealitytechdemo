@@ -6,7 +6,6 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewGroupCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -18,8 +17,6 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    GestureDetector gestureDetector;
 
     private static final int MAX_CLICK_DURATION = 100;
     private long startClickTime;
@@ -129,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
-        gestureDetector = new GestureDetector(getApplicationContext(), new GestureListener());
 
         getWindow().getDecorView().setSystemUiVisibility(
                           View.SYSTEM_UI_FLAG_LAYOUT_STABLE
