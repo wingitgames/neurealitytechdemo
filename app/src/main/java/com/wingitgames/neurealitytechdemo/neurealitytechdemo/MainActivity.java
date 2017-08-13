@@ -6,6 +6,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewGroupCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    GestureDetector gestureDetector;
 
     private static final int MAX_CLICK_DURATION = 100;
     private long startClickTime;
@@ -126,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
+        gestureDetector = new GestureDetector(this, new GestureListener());
 
         getWindow().getDecorView().setSystemUiVisibility(
                           View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -136,162 +140,6 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         initializeGame();
-    }
-
-    public boolean onTouchEvent(MotionEvent touchevent) {
-
-        switch(touchevent.getAction()) {
-
-            case MotionEvent.ACTION_DOWN:
-                x1 = touchevent.getX();
-                y1 = touchevent.getY();
-
-                startClickTime = java.util.Calendar.getInstance().getTimeInMillis();
-                break;
-
-            case MotionEvent.ACTION_UP:
-
-                x2 = touchevent.getX();
-                y2 = touchevent.getY();
-
-                String xyVals = "x1 = " + x1 + " x2 = " + x2 + " y1 = " + y1 + " y2 = " + y2 + "\n";
-
-                // Android Calendar is API 24 darnit
-                long clickDuration = java.util.Calendar.getInstance().getTimeInMillis() - startClickTime;
-                if (clickDuration < MAX_CLICK_DURATION) {
-
-                    Toast.makeText(this, "Single tap has performed " + xyVals, Toast.LENGTH_SHORT).show();
-
-                } else {
-
-                    diffx = x2 - x1;
-                    diffy = y2 - y1;
-
-                    int moveX = 0;
-                    int moveY = 0;
-
-                    double rad = Math.atan2(y1 - y2, x2 - x1) + Math.PI;
-/*
-                    if (x1 < x2 && Math.abs(diffy) < Math.abs(diffx)) {
-
-                        Toast.makeText(this, "Left to Right swipe Performed " + xyVals + " radians = " + rad, Toast.LENGTH_SHORT).show();
-
-                        moveX = 1;
-                    }
-
-                    if (x1 > x2 && Math.abs(diffy) < Math.abs(diffx)) {
-
-                        Toast.makeText(this, "Right to Left swipe Performed " + xyVals + " radians = " + rad, Toast.LENGTH_SHORT).show();
-
-                        moveX = -1;
-                    }
-
-                    if (y1 < y2 && Math.abs(diffx) < Math.abs(diffy)) {
-
-                        Toast.makeText(this, "Top to Bottom swipe Performed " + xyVals + " radians = " + rad, Toast.LENGTH_SHORT).show();
-
-                        moveY = -1;
-                    }
-
-                    if (y1 > y2 && Math.abs(diffx) < Math.abs(diffy)) {
-
-                        Toast.makeText(this, "Bottom to Top swipe Performed " + xyVals + " radians = " + rad, Toast.LENGTH_SHORT).show();
-
-                        moveY = 1;
-                    }
-*/
-                    int mapX = party.X + bigMapColOffset;
-                    int mapY = party.Y + bigMapRowOffset;
-
-                    boolean movePartyOK = false;
-                    if(rad > 1.875 * Math.PI || rad <= 0.125 * Math.PI) {
-
-                        if(mapX > 0) {
-
-                            moveX = -1;
-                            movePartyOK = true;
-                        }
-
-                    } else if(rad > 0.125 * Math.PI && rad <= 0.375 * Math.PI) {
-
-                        if(mapX > 0 && mapY > 0) {
-
-                            moveX = -1;
-                            moveY = -1;
-                            movePartyOK = true;
-                        }
-
-
-                    } else if(rad > 0.375 * Math.PI && rad <= 0.625 * Math.PI) {
-
-                        if(mapY > 0) {
-
-                            moveY = -1;
-                            movePartyOK = true;
-                        }
-
-                    } else if(rad > 0.625 * Math.PI && rad <= 0.875 * Math.PI) {
-
-                        if(mapX > 0 && mapY < bigMap.length - 1) {
-
-                            moveX = 1;
-                            moveY = -1;
-                            movePartyOK = true;
-                        }
-
-                    } else if(rad > 0.875 * Math.PI && rad <= 1.125 * Math.PI) {
-
-                        if(mapX < bigMap[0].length - 1) {
-
-                            moveX = 1;
-                            movePartyOK = true;
-                        }
-
-                    } else if(rad > 1.125 * Math.PI && rad <= 1.375 * Math.PI) {
-
-                        if(mapX < bigMap[0].length - 1 && mapY < bigMap.length - 1 ) {
-
-                            moveX = 1;
-                            moveY = 1;
-                            movePartyOK = true;
-                        }
-
-                    } else if(rad > 1.375 * Math.PI && rad <= 1.625 * Math.PI) {
-
-                        if(mapY < bigMap.length - 1) {
-
-                            moveY = 1;
-                            movePartyOK = true;
-                        }
-
-                    } else if(rad > 1.625 * Math.PI && rad <= 1.875 * Math.PI) {
-
-                        if(mapX < bigMap.length - 1 && mapY > 0) {
-
-                            moveX = -1;
-                            moveY = 1;
-                            movePartyOK = true;
-                        }
-                    }
-
-                    if(movePartyOK) {
-
-                        moveParty(moveX, moveY);
-                    }
-                }
-
-                break;
-        }
-
-        return false;
-    }
-
-    public boolean onSingleTapConfirmed(MotionEvent e) {
-
-        Intent i = new Intent(getApplicationContext(), Second.class);
-        getContext().startActivity(i);
-
-        return true;
     }
 
     @Override
@@ -314,6 +162,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        return gestureDetector.onTouchEvent(e);
     }
 
     private void initializeGame() {
@@ -714,10 +567,243 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.start();
     }
 
-    public boolean onSingleTapConfirmed(MotionEvent e) {
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
-        Toast.makeText(this, "Single Tap Confirmed", Toast.LENGTH_SHORT).show();
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
 
-        return true;
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+
+            float x = e.getX();
+            float y = e.getY();
+
+            String xyVals = "x = " + x + " y = " + y + "\n";
+
+            Toast.makeText(getApplicationContext(), "Single tap has occured x = " + xyVals, Toast.LENGTH_SHORT).show();
+
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            float x = e.getX();
+            float y = e.getY();
+
+            String xyVals = "x = " + x + " y = " + y + "\n";
+
+            Toast.makeText(getApplicationContext(), "Double tap has occured x = " + xyVals, Toast.LENGTH_SHORT).show();
+
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+
+            float x1 = event1.getX();
+            float y1 = event1.getY();
+            float x2 = event2.getX();
+            float y2 = event2.getY();
+
+            diffx = x2 - x1;
+            diffy = y2 - y1;
+
+            Direction direction = getDirection(x1,y1,x2,y2);
+
+            int moveX = 0;
+            int moveY = 0;
+
+            double rad = Math.atan2(y1 - y2, x2 - x1) + Math.PI;
+
+            int mapX = party.X + bigMapColOffset;
+            int mapY = party.Y + bigMapRowOffset;
+
+            String xyVals = " x1 = " + x1 + " y1 = " + y1 + " x2 = " + x2 + " y2 = " + y2 + "\n";
+
+            //Toast.makeText(getApplicationContext(), "Swipe direction = " + direction + xyVals, Toast.LENGTH_SHORT).show();
+
+            String dir = "" + direction + "";
+
+            Log.d("x1", Float.toString(x1));
+            Log.d("y1", Float.toString(y1));
+            Log.d("x2", Float.toString(x2));
+            Log.d("y2", Float.toString(y2));
+            Log.d("direction", dir);
+
+            boolean movePartyOK = false;
+            if(rad > 1.875 * Math.PI || rad <= 0.125 * Math.PI) {
+            //if(direction == Direction.LEFT) {
+
+                if (mapX > 0) {
+
+                    moveX = -1;
+                    movePartyOK = true;
+                }
+
+            } else //if(direction == Direction.BOTTOM_LEFT) {
+                 if(rad > 0.125 * Math.PI && rad <= 0.375 * Math.PI) {
+
+                if(mapX > 0 && mapY > 0) {
+
+                    moveX = -1;
+                    moveY = -1;
+                    movePartyOK = true;
+                }
+
+            } else //if(direction == Direction.BOTTOM) { //
+                   if(rad > 0.375 * Math.PI && rad <= 0.625 * Math.PI) {
+
+                if(mapY > 0) {
+
+                    moveY = -1;
+                    movePartyOK = true;
+                }
+
+            } else //if(direction == Direction.BOTTOM_RIGHT) { //
+                   if(rad > 0.625 * Math.PI && rad <= 0.875 * Math.PI) {
+
+                if(mapX > 0 && mapY < bigMap.length - 1) {
+
+                    moveX = 1;
+                    moveY = -1;
+                    movePartyOK = true;
+                }
+
+            } else //if(direction == Direction.RIGHT) { //
+                   if(rad > 0.875 * Math.PI && rad <= 1.125 * Math.PI) {
+
+                if(mapX < bigMap[0].length - 1) {
+
+                    moveX = 1;
+                    movePartyOK = true;
+                }
+
+            } else //if(direction == Direction.TOP_RIGHT) {
+                   if(rad > 1.125 * Math.PI && rad <= 1.375 * Math.PI) {
+
+                if(mapX < bigMap[0].length - 1 && mapY < bigMap.length - 1 ) {
+
+                    moveX = 1;
+                    moveY = 1;
+                    movePartyOK = true;
+                }
+
+            } else //if(direction == Direction.TOP) { //
+                   if(rad > 1.375 * Math.PI && rad <= 1.625 * Math.PI) {
+
+                if(mapY < bigMap.length - 1) {
+
+                    moveY = 1;
+                    movePartyOK = true;
+                }
+
+            } else //if(direction == Direction.TOP_LEFT) { //
+                   if(rad > 1.625 * Math.PI && rad <= 1.875 * Math.PI) {
+
+                if(mapX < bigMap.length - 1 && mapY > 0) {
+
+                    moveX = -1;
+                    moveY = 1;
+                    movePartyOK = true;
+                }
+            }
+
+            if(movePartyOK) {
+
+                moveParty(moveX, moveY);
+            }
+
+            return onSwipe(direction);
+        }
+
+        /** Override this method. The Direction enum will tell you how the user swiped. */
+        public boolean onSwipe(Direction direction){
+            return false;
+        }
+
+        public Direction getDirection(float x1, float y1, float x2, float y2){
+            double angle = getAngle(x1, y1, x2, y2);
+            return Direction.get(angle);
+        }
+
+        public double getAngle(float x1, float y1, float x2, float y2) {
+
+            double rad = Math.atan2(y1-y2,x2-x1) + Math.PI;
+            return (rad*180/Math.PI + 180)%360;
+        }
+
+/*
+        @Override
+        public void onLongPress(MotionEvent event) {
+            Toast.makeText(getApplicationContext(), "onLongPress: " + event.toString(), Toast.LENGTH_SHORT).show();
+        }
+*/
+/*
+        @Override
+        public boolean onScroll(MotionEvent event1, MotionEvent event2, float distanceX,
+                                float distanceY) {
+
+            Toast.makeText(getApplicationContext(), "onScroll: " + event1.toString() + event2.toString(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+*/
+/*
+        @Override
+        public void onShowPress(MotionEvent event) {
+            Toast.makeText(getApplicationContext(), "onShowPress: " + event.toString(), Toast.LENGTH_SHORT).show();
+        }
+*/
+    }
+
+    public enum Direction {
+        TOP,
+        TOP_RIGHT,
+        RIGHT,
+        BOTTOM_RIGHT,
+        BOTTOM,
+        BOTTOM_LEFT,
+        LEFT,
+        TOP_LEFT;
+
+        /**
+         * Returns a direction given an angle.
+         * Directions are defined as follows:
+         * <p>
+         * Up: [45, 135]
+         * Right: [0,45] and [315, 360]
+         * Down: [225, 315]
+         * Left: [135, 225]
+         *
+         * @param angle an angle from 0 to 360 - e
+         * @return the direction of an angle
+         */
+        static float OFFSET = 45 / 2;
+        public static Direction get(double angle) {
+            if (inRange(angle, (45f + OFFSET), (90f + OFFSET))) {
+                return Direction.TOP;
+            } else if (inRange(angle, (0 + OFFSET), (45f + OFFSET))) {
+                return Direction.TOP_RIGHT;
+            } else if (inRange(angle, 0, 22.5f) || inRange(angle, 302.5f, 360)) {
+                return Direction.RIGHT;
+            } else if (inRange(angle, 247.5f, 302.5f)) {
+                return Direction.BOTTOM_RIGHT;
+            } else if (inRange(angle, 202.5f, 247.5f)) {
+                return Direction.BOTTOM;
+            } else if (inRange(angle, 157.5f, 202.5f)) {
+                return Direction.BOTTOM_LEFT;
+            } else if (inRange(angle, 157.5f, 202.5f)) {
+                return Direction.LEFT;
+            } else { //if (inRange(angle, 112.5f, 157.5f)) {
+                return Direction.TOP_LEFT;
+            }
+
+        }
+
+        private static boolean inRange(double angle, float init, float end) {
+            return (angle >= init) && (angle < end);
+        }
     }
 }
